@@ -270,7 +270,7 @@ bigPictureClose.addEventListener('click', function () {
 
 // Validation check
 var submitButton = document.querySelector('#upload-submit');
-var invalidityMessages = [];
+var invalidities = [];
 
 var checkHashtagsValidity = function (hashtags) {
   var splitHashtags = function () {
@@ -351,31 +351,31 @@ var checkHashtagsValidity = function (hashtags) {
   };
 
   var getMessages = function () {
-    invalidityMessages = [];
+    invalidities = [];
     var message;
     if (noPound.indexOf(true) !== -1) {
-      message = 'Хэш-тег должен начинаться с символа \"#\".';
-      invalidityMessages.push(message);
+      message = 'Хэш-тег должен начинаться с символа \"#\"';
+      invalidities.push(message);
     }
     if (onlyPound.indexOf(true) !== -1) {
-      message = 'Хэш-тег не может состоять только из одной решётки.';
-      invalidityMessages.push(message);
+      message = 'Хэш-тег не может состоять только из одной решётки';
+      invalidities.push(message);
     }
     if (noSpace) {
-      message = 'Хэштеги разделяются пробелами.';
-      invalidityMessages.push(message);
+      message = 'Хэштеги разделяются пробелами';
+      invalidities.push(message);
     }
     if (hasDuplicates) {
-      message = 'Один и тот же хэш-тег не может быть использован дважды.';
-      invalidityMessages.push(message);
+      message = 'Один и тот же хэш-тег не может быть использован дважды';
+      invalidities.push(message);
     }
     if (tooManyHashtags) {
-      message = 'Нельзя указывать больше пяти хэш-тегов.';
-      invalidityMessages.push(message);
+      message = 'Нельзя указывать больше пяти хэш-тегов';
+      invalidities.push(message);
     }
     if (lengthTooLarge.indexOf(true) !== -1) {
-      message = 'Максимальная длина одного хэш-тега 20 символов, включая решётку.';
-      invalidityMessages.push(message);
+      message = 'Максимальная длина одного хэш-тега 20 символов, включая решётку';
+      invalidities.push(message);
     }
   };
 
@@ -383,10 +383,18 @@ var checkHashtagsValidity = function (hashtags) {
   getMessages();
 };
 
-submitButton.addEventListener('click', function (evt) {
-  if (hashtagsInput.value !== '') {
-    evt.preventDefault();
-    checkHashtagsValidity(hashtagsInput);
-    console.log(invalidityMessages);
+var setCustomMessages = function (input) {
+  if (invalidities.length === 0 || input.value === '') {
+    input.setCustomValidity('');
+  } else {
+    var message = invalidities.join('. \n');
+    input.setCustomValidity(message);
   }
+};
+
+submitButton.addEventListener('click', function () {
+  if (hashtagsInput.value !== '') {
+    checkHashtagsValidity(hashtagsInput);
+  }
+  setCustomMessages(hashtagsInput);
 });
