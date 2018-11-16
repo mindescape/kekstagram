@@ -751,6 +751,10 @@ main {
   border-radius: 5px;
 }
 
+.invalid {
+  border: 1px solid #ff0000;
+}
+
 .text__description {
   width: 450px;
   height: 100px;

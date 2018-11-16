@@ -389,9 +389,11 @@ var checkHashtagsValidity = function (hashtags) {
 var setCustomMessages = function (input) {
   if (invalidities.length === 0 || input.value === '') {
     input.setCustomValidity('');
+    input.classList.remove('invalid');
   } else {
     var message = invalidities.join('. \n');
     input.setCustomValidity(message);
+    input.classList.add('invalid');
   }
 };
 
