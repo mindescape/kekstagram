@@ -144,6 +144,8 @@ var scaleControlBigger = document.querySelector('.scale__control--bigger');
 var effectsList = document.querySelector('.effects__list');
 var picturesDOM = document.querySelector('.pictures');
 var bigPictureClose = document.querySelector('.big-picture__cancel');
+var hashtagsInput = document.querySelector('.text__hashtags');
+var descriptionInput = document.querySelector('.text__description');
 
 var resetValue = function (input) {
   input.value = '';
@@ -151,8 +153,11 @@ var resetValue = function (input) {
 
 var onUploadEscPress = function (evt) {
   if (evt.keyCode === ESC_KEY) {
-    hideImgUploadOverlay();
-    resetValue(uploadButton);
+    if (document.activeElement !== hashtagsInput && document.activeElement !== descriptionInput) {
+      hideImgUploadOverlay();
+      resetValue(uploadButton);
+      document.querySelector('body').classList.remove('modal-open');
+    }
   }
 };
 
@@ -168,11 +173,13 @@ var hideImgUploadOverlay = function () {
 
 uploadButton.addEventListener('change', function () {
   showImgUploadOverlay();
+  document.querySelector('body').classList.add('modal-open');
 });
 
 cancelUploadButton.addEventListener('click', function () {
   hideImgUploadOverlay();
   resetValue(uploadButton);
+  document.querySelector('body').classList.remove('modal-open');
 });
 
 var changeImgScale = function (type) {
@@ -261,4 +268,138 @@ picturesDOM.addEventListener('click', function (evt) {
 
 bigPictureClose.addEventListener('click', function () {
   hideBigPicture();
+});
+
+
+// Validation
+var submitButton = document.querySelector('#upload-submit');
+var invalidities = [];
+
+var checkHashtagsValidity = function (hashtags) {
+  var splitHashtags = function () {
+    return hashtags.value.split(' ');
+  };
+  var hashtagsArr = splitHashtags();
+
+  var noPound = [];
+  var onlyPound = [];
+  var noSpace;
+  var hasDuplicates = [];
+  var tooManyHashtags;
+  var lengthTooLarge = [];
+
+  var checkIfNoPound = function (index) {
+    if (hashtagsArr[index][0].indexOf('#') === -1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  var checkIfOnlyPound = function (index) {
+    if (hashtagsArr[index].indexOf('#') === 0 && hashtagsArr[index].length === 1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  var checkIfNoSpace = function () {
+    if (hashtags.value.match(/#\w+#/g)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  var checkIfDuplicates = function () {
+    var isDuplicate = false;
+    for (var i = 0; i < hashtagsArr.length; i++) {
+      for (var k = i + 1; k < hashtagsArr.length; k++) {
+        if (hashtagsArr[i] === hashtagsArr[k]) {
+          isDuplicate = true;
+        }
+      }
+    }
+    return isDuplicate;
+  };
+
+  var checkIfTooMany = function () {
+    var ALLOWED_HASHTAGS_NUMBER = 5;
+    if (hashtagsArr.length > ALLOWED_HASHTAGS_NUMBER) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  var checkIfLengthToolarge = function (index) {
+    var HASHTAG_MAX_LENGTH = 20;
+    if (hashtagsArr[index].length > HASHTAG_MAX_LENGTH) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  var getValidityStatuses = function () {
+    for (var i = 0; i < hashtagsArr.length; i++) {
+      noPound.push(checkIfNoPound(i));
+      onlyPound.push(checkIfOnlyPound(i));
+      lengthTooLarge.push(checkIfLengthToolarge(i));
+    }
+    noSpace = checkIfNoSpace();
+    hasDuplicates = checkIfDuplicates();
+    tooManyHashtags = checkIfTooMany();
+  };
+
+  var getMessages = function () {
+    invalidities = [];
+    var message;
+    if (noPound.indexOf(true) !== -1) {
+      message = 'Хэш-тег должен начинаться с символа \"#\"';
+      invalidities.push(message);
+    }
+    if (onlyPound.indexOf(true) !== -1) {
+      message = 'Хэш-тег не может состоять только из одной решётки';
+      invalidities.push(message);
+    }
+    if (noSpace) {
+      message = 'Хэштеги разделяются пробелами';
+      invalidities.push(message);
+    }
+    if (hasDuplicates) {
+      message = 'Один и тот же хэш-тег не может быть использован дважды';
+      invalidities.push(message);
+    }
+    if (tooManyHashtags) {
+      message = 'Нельзя указывать больше пяти хэш-тегов';
+      invalidities.push(message);
+    }
+    if (lengthTooLarge.indexOf(true) !== -1) {
+      message = 'Максимальная длина одного хэш-тега 20 символов, включая решётку';
+      invalidities.push(message);
+    }
+  };
+
+  getValidityStatuses();
+  getMessages();
+};
+
+var setCustomMessages = function (input) {
+  if (invalidities.length === 0 || input.value === '') {
+    input.setCustomValidity('');
+    input.classList.remove('invalid');
+  } else {
+    var message = invalidities.join('. \n');
+    input.setCustomValidity(message);
+    input.classList.add('invalid');
+  }
+};
+
+submitButton.addEventListener('click', function () {
+  if (hashtagsInput.value !== '') {
+    checkHashtagsValidity(hashtagsInput);
+  }
+  setCustomMessages(hashtagsInput);
 });
