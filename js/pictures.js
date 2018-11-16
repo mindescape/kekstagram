@@ -156,6 +156,7 @@ var onUploadEscPress = function (evt) {
     if (document.activeElement !== hashtagsInput && document.activeElement !== descriptionInput) {
       hideImgUploadOverlay();
       resetValue(uploadButton);
+      document.querySelector('body').classList.remove('modal-open');
     }
   }
 };
@@ -172,11 +173,13 @@ var hideImgUploadOverlay = function () {
 
 uploadButton.addEventListener('change', function () {
   showImgUploadOverlay();
+  document.querySelector('body').classList.add('modal-open');
 });
 
 cancelUploadButton.addEventListener('click', function () {
   hideImgUploadOverlay();
   resetValue(uploadButton);
+  document.querySelector('body').classList.remove('modal-open');
 });
 
 var changeImgScale = function (type) {
@@ -268,7 +271,7 @@ bigPictureClose.addEventListener('click', function () {
 });
 
 
-// Validation check
+// Validation
 var submitButton = document.querySelector('#upload-submit');
 var invalidities = [];
 
