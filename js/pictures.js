@@ -340,9 +340,9 @@
     applyEffect();
   };
 
-  var changeEffectValue = function (value, maxValue) {
-    var CURRENT_VALUE = value;
-    var MAX_VALUE = maxValue;
+  var changeEffectValue = function () {
+    var CURRENT_VALUE = effectLevelPin.offsetLeft;
+    var MAX_VALUE = effectLevelLine.offsetWidth;
     var currentEffect = img.className;
     var computed;
 
@@ -362,6 +362,8 @@
       computed = (CURRENT_VALUE * 2) / MAX_VALUE + 1;
       img.style.filter = 'brightness(' + computed + ')';
     }
+
+    effectLevelValue.value = parseInt(computed, 10);
   };
 
   effectsList.addEventListener('click', onEffectClick);
@@ -385,7 +387,6 @@
 
       effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
       effectLevelDepth.style.width = effectLevelPin.offsetLeft + 'px';
-      effectLevelValue.value = effectLevelPin.offsetLeft;
 
       if (effectLevelPin.offsetLeft <= 0) {
         effectLevelPin.style.left = '0';
@@ -397,7 +398,7 @@
         effectLevelValue.value = effectLevelLine.offsetWidth;
       }
 
-      changeEffectValue(effectLevelValue.value, effectLevelLine.offsetWidth);
+      changeEffectValue();
 
     };
 
