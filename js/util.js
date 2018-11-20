@@ -17,6 +17,9 @@ window.util = (function () {
       if (evt.keyCode === ENTER_KEY) {
         action();
       }
+    },
+    resetValue: function (input) {
+      input.value = '';
     }
   };
 })();
