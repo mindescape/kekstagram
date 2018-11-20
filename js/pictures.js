@@ -241,6 +241,7 @@
   var scaleControlSmaller = document.querySelector('.scale__control--smaller');
   var scaleControlBigger = document.querySelector('.scale__control--bigger');
   var effectsList = document.querySelector('.effects__list');
+  var effectsPin = document.querySelector('.effect-level__pin');
 
   var changeImgScale = function (type) {
     var scaleInput = document.querySelector('.scale__control--value');
@@ -273,7 +274,7 @@
     changeImgScale(1);
   });
 
-  effectsList.addEventListener('click', function (evt) {
+  var controlEffects = function (evt) {
     var effectNone = effectsList.querySelector('#effect-none');
     var effectChrome = effectsList.querySelector('#effect-chrome');
     var effectSepia = effectsList.querySelector('#effect-sepia');
@@ -286,7 +287,6 @@
         img.classList.remove(img.classList[i]);
       }
     };
-
     if (evt.target === effectNone) {
       removeEffects();
     } else if (evt.target === effectChrome) {
@@ -305,6 +305,32 @@
       removeEffects();
       img.classList.add('effects__preview--heat');
     }
+  };
+
+  effectsList.addEventListener('click', function (evt) {
+    controlEffects(evt);
+  });
+
+  effectsPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX
+    };
+
+    document.addEventListener('mousemove', function (moveEvt) {
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX
+      };
+
+      startCoords = {
+        x: moveEvt.clientX
+      };
+
+      effectsPin.style.left = (effectsPin.offsetLeft - shift.x) + 'px';
+
+    });
   });
 })();
 
