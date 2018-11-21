@@ -275,7 +275,7 @@
       var isDuplicate = false;
       for (var i = 0; i < hashtagsArr.length; i++) {
         for (var k = i + 1; k < hashtagsArr.length; k++) {
-          if (hashtagsArr[i] === hashtagsArr[k]) {
+          if (hashtagsArr[i].toLowerCase() === hashtagsArr[k].toLowerCase()) {
             isDuplicate = true;
           }
         }
