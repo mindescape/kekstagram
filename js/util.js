@@ -8,15 +8,11 @@ window.util = (function () {
     getRandomNumber: function (min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
-    isEventEsc: function (evt, action) {
-      if (evt.keyCode === ESC_KEY) {
-        action();
-      }
+    isEventEsc: function (evt) {
+      return evt.keyCode === ESC_KEY ? true : false;
     },
-    isEventEnter: function (evt, action) {
-      if (evt.keyCode === ENTER_KEY) {
-        action();
-      }
+    isEventEnter: function (evt) {
+      return evt.keyCode === ENTER_KEY ? true : false;
     },
     resetValue: function (input) {
       input.value = '';

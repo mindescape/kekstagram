@@ -168,8 +168,10 @@
   };
 
   var onPictureEscPress = function (evt) {
-    window.util.isEventEsc(evt, hideBigPicture);
-    document.removeEventListener('click', onOutsidePreviewClick);
+    if (window.util.isEventEsc(evt)) {
+      hideBigPicture();
+      document.removeEventListener('click', onOutsidePreviewClick);
+    }
   };
 
   picturesDOM.addEventListener('click', function (evt) {
