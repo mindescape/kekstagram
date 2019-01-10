@@ -11,9 +11,11 @@
 
   var onUploadEscPress = function (evt) {
     if (document.activeElement !== hashtagsInput && document.activeElement !== descriptionInput) {
-      window.util.isEventEsc(evt, hideImgUploadOverlay);
-      resetValue(uploadButton);
-      document.querySelector('body').classList.remove('modal-open');
+      if (window.util.isEventEsc(evt)) {
+        hideImgUploadOverlay();
+        resetValue(uploadButton);
+        document.querySelector('body').classList.remove('modal-open');
+      }
     }
   };
 
