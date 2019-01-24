@@ -7,6 +7,10 @@
   var COMMENTS_NUMBER = 3;
   var LIKES_MIN = 15;
   var LIKES_MAX = 200;
+  var AVATAR_MIN = 1;
+  var AVATAR_MAX = 6;
+  var AVATAR_WIDTH = 35;
+  var AVATAR_HEIGHT = 35;
 
 
   // Mock data
@@ -30,6 +34,10 @@
   var template = document.querySelector('#picture');
   var pictureTemplate = template.content.querySelector('.picture');
   var picturesDOM = document.querySelector('.pictures');
+  var bigPicture = document.querySelector('.big-picture');
+  var commentsDOM = document.querySelector('.social__comments');
+  var commentsCounter = document.querySelector('.social__comment-count');
+  var commentsLoader = document.querySelector('.comments-loader');
 
 
   // Util functions
@@ -70,8 +78,6 @@
     return comments;
   };
 
-
-  // Create content on page
   var getPicture = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
@@ -82,15 +88,75 @@
     return pictureElement;
   };
 
+  var getComment = function (comment) {
+    var li = document.createElement('li');
+    var img = document.createElement('img');
+    var p = document.createElement('p');
+
+    li.classList.add('social__comment');
+    img.classList.add('social__picture');
+    img.src = 'img/avatar-' + getRandomNumber(AVATAR_MIN, AVATAR_MAX) + '.svg';
+    img.alt = 'Аватар комментатора фотографии';
+    img.width = AVATAR_WIDTH;
+    img.height = AVATAR_HEIGHT;
+    p.classList.add('social__text');
+    p.textContent = comment;
+
+    li.appendChild(img);
+    li.appendChild(p);
+
+    return li;
+  };
+
+  var removeComments = function () {
+    while (commentsDOM.hasChildNodes()) {
+      commentsDOM.removeChild(commentsDOM.firstChild);
+    }
+  };
+
+  var addComments = function (picture) {
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < picture.comments.length; i++) {
+      var comment = picture.comments[i];
+      fragment.appendChild(getComment(comment));
+    }
+
+    commentsDOM.appendChild(fragment);
+  };
+
+
+  // Render content on page
   var renderPictures = function (arr) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < arr.length; i++) {
       var currentPicture = getPicture(arr[i]);
+
+      currentPicture.setAttribute('data-id', i);
       fragment.appendChild(currentPicture);
+
+      currentPicture.addEventListener('click', function (evt) {
+        evt.preventDefault();
+        renderOverlay(arr[evt.currentTarget.dataset.id]);
+      });
     }
 
     picturesDOM.appendChild(fragment);
+  };
+
+  var renderOverlay = function (picture) {
+    bigPicture.querySelector('.big-picture__img').querySelector('img').src = picture.url;
+    bigPicture.querySelector('.likes-count').textContent = picture.likes;
+    bigPicture.querySelector('.comments-count').textContent = picture.comments.length;
+    bigPicture.querySelector('.social__caption').textContent = picture.description;
+
+    removeComments();
+    addComments(picture);
+
+    bigPicture.classList.remove('hidden');
+    commentsCounter.classList.add('visually-hidden');
+    commentsLoader.classList.add('visually-hidden');
   };
 
   var generatedPictures = generatePictures();
