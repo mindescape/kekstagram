@@ -162,15 +162,16 @@
     commentsCounter.classList.add('visually-hidden');
     commentsLoader.classList.add('visually-hidden');
 
-    document.addEventListener('keydown', onBigPictureEsc);
+    document.addEventListener('keydown', onBigPictureEscPress);
     document.addEventListener('click', onOutsideBigPictureClick);
   };
 
   var generatedPictures = generatePictures();
   renderPictures(generatedPictures);
 
+
   // Event handlers
-  var onBigPictureEsc = function (evt) {
+  var onBigPictureEscPress = function (evt) {
     if (evt.keyCode === KEYCODE_ESC) {
       hideBigPicture();
       document.removeEventListener('click', onOutsideBigPictureClick);
@@ -185,7 +186,7 @@
 
   var hideBigPicture = function () {
     bigPicture.classList.add('hidden');
-    document.removeEventListener('keydown', onBigPictureEsc);
+    document.removeEventListener('keydown', onBigPictureEscPress);
     document.removeEventListener('click', onOutsideBigPictureClick);
   };
 
