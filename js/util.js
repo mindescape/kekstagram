@@ -6,7 +6,12 @@
     ENTER: 13
   };
 
+  var resetValue = function (input) {
+    input.value = '';
+  };
+
   window.util = {
-    keycode: keycode
+    keycode: keycode,
+    resetValue: resetValue
   };
 })();
