@@ -12,6 +12,9 @@
   var AVATAR_WIDTH = 35;
   var AVATAR_HEIGHT = 35;
 
+  var KEYCODE_ESC = 27;
+  var KEYCODE_ENTER = 13;
+
 
   // Mock data
   var MOCK_COMMENTS = [
@@ -35,6 +38,7 @@
   var pictureTemplate = template.content.querySelector('.picture');
   var picturesDOM = document.querySelector('.pictures');
   var bigPicture = document.querySelector('.big-picture');
+  var bigPictureClose = document.querySelector('#picture-cancel');
   var commentsDOM = document.querySelector('.social__comments');
   var commentsCounter = document.querySelector('.social__comment-count');
   var commentsLoader = document.querySelector('.comments-loader');
@@ -138,14 +142,14 @@
 
       currentPicture.addEventListener('click', function (evt) {
         evt.preventDefault();
-        renderOverlay(arr[evt.currentTarget.dataset.id]);
+        renderBigPicture(arr[evt.currentTarget.dataset.id]);
       });
     }
 
     picturesDOM.appendChild(fragment);
   };
 
-  var renderOverlay = function (picture) {
+  var renderBigPicture = function (picture) {
     bigPicture.querySelector('.big-picture__img').querySelector('img').src = picture.url;
     bigPicture.querySelector('.likes-count').textContent = picture.likes;
     bigPicture.querySelector('.comments-count').textContent = picture.comments.length;
@@ -157,8 +161,41 @@
     bigPicture.classList.remove('hidden');
     commentsCounter.classList.add('visually-hidden');
     commentsLoader.classList.add('visually-hidden');
+
+    document.addEventListener('keydown', onBigPictureEsc);
+    document.addEventListener('click', onOutsideBigPictureClick);
   };
 
   var generatedPictures = generatePictures();
   renderPictures(generatedPictures);
+
+  // Event handlers
+  var onBigPictureEsc = function (evt) {
+    if (evt.keyCode === KEYCODE_ESC) {
+      hideBigPicture();
+      document.removeEventListener('click', onOutsideBigPictureClick);
+    }
+  };
+
+  var onOutsideBigPictureClick = function (evt) {
+    if (evt.target === bigPicture) {
+      hideBigPicture();
+    }
+  };
+
+  var hideBigPicture = function () {
+    bigPicture.classList.add('hidden');
+    document.removeEventListener('keydown', onBigPictureEsc);
+    document.removeEventListener('click', onOutsideBigPictureClick);
+  };
+
+  bigPictureClose.addEventListener('click', function () {
+    hideBigPicture();
+  });
+
+  bigPictureClose.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === KEYCODE_ENTER) {
+      hideBigPicture();
+    }
+  });
 })();
