@@ -5,6 +5,18 @@ window.util = (function () {
   var ESC_KEY = 27;
 
   return {
+    onError: function (message) {
+      var node = document.createElement('div');
+      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+      node.style.position = 'fixed';
+      node.style.left = 0;
+      node.style.right = 0;
+      node.style.padding = '4px 0';
+      node.style.fontSize = '30px';
+
+      node.textContent = message;
+      document.body.insertAdjacentElement('afterbegin', node);
+    },
     getRandomNumber: function (min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
