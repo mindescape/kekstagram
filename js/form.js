@@ -58,9 +58,26 @@
     }
   };
 
+  var Hashtag = {
+    MIN_LENGTH: 2,
+    MAX_LENGTH: 20,
+    MAX_NUMBER: 5
+  };
+
+  var HashtagMessage = {
+    TOO_MANY: 'Нельзя указать больше пяти хэш-тегов. ',
+    NO_SPACE: 'Хэш-теги должны разделяться пробелом. ',
+    SAME: 'Один и тот же хэш-тег не может быть использован дважды. ',
+    NOT_HASH: 'Хэш-тег должен начинаться с символа #. ',
+    SHORT: 'Хэш-тег не может состоять только из одного символа. ',
+    LONG: 'Максимальная длина одного хэш-тега — 20 символов, включая решётку. '
+  };
+
+  var form = document.querySelector('.img-upload__form');
   var uploadButton = document.querySelector('#upload-file');
   var uploadCancelButton = document.querySelector('#upload-cancel');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
+  var uploadSubmit = uploadOverlay.querySelector('#upload-submit');
   var scaleControlValue = uploadOverlay.querySelector('.scale__control--value');
   var scaleControlSmaller = uploadOverlay.querySelector('.scale__control--smaller');
   var scaleControlBigger = uploadOverlay.querySelector('.scale__control--bigger');
@@ -85,15 +102,29 @@
     }
   };
 
+  var onHashtagsInputEnterPress = function (evt) {
+    if (evt.keyCode === window.util.keycode.ENTER) {
+      evt.preventDefault();
+    }
+  };
+
+  var onHashtagsInput = function () {
+    hashtagsInput.setCustomValidity('');
+    hashtagsInput.style.outline = null;
+  };
+
   // Hide form
   var hideUploadOverlay = function () {
     uploadOverlay.classList.add('hidden');
     window.util.resetValue(uploadButton);
+    hashtagsInput.style.outline = null;
+    form.reset();
 
     document.removeEventListener('keydown', onUploadEscPress);
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
     effectsList.removeEventListener('click', setEffect);
+    uploadSubmit.removeEventListener('click', onUploadSubmitClick);
   };
 
   // Default form settings
@@ -126,6 +157,9 @@
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
     effectsList.addEventListener('click', setEffect);
+    uploadSubmit.addEventListener('click', onUploadSubmitClick);
+    hashtagsInput.addEventListener('input', onHashtagsInput);
+    hashtagsInput.addEventListener('keydown', onHashtagsInputEnterPress);
   };
 
   // Change image scale
@@ -230,6 +264,54 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
+  // Validation
+  var showValidationError = function (message) {
+    hashtagsInput.setCustomValidity(message);
+    hashtagsInput.style.outline = '1px solid red';
+  };
+
+  var onUploadSubmitClick = function () {
+    var userHashtags = document.querySelector('.text__hashtags').value.toLowerCase().replace(/\s+/g, ' ').trim();
+
+    if (userHashtags) {
+      var splitHashtags = userHashtags.split(' ');
+      var errorMessages = [];
+      var isDuplicate = false;
+
+      if (splitHashtags.length > Hashtag.MAX_NUMBER) {
+        errorMessages.push(HashtagMessage.TOO_MANY);
+      }
+
+      splitHashtags.forEach(function (el) {
+        var hashtagSymbols = el.trim().split('');
+        var sameHashtags = window.util.searchDuplicate(el, splitHashtags);
+        var symbolCount = window.util.searchDuplicate('#', hashtagSymbols);
+
+        if (symbolCount > 1) {
+          errorMessages.push(HashtagMessage.NO_SPACE);
+        }
+        if (sameHashtags > 1) {
+          isDuplicate = true;
+        }
+        if (el[0] !== '#') {
+          errorMessages.push(HashtagMessage.NOT_HASH);
+        }
+        if (el.length < Hashtag.MIN_LENGTH) {
+          errorMessages.push(HashtagMessage.SHORT);
+        }
+        if (el.length > Hashtag.MAX_LENGTH) {
+          errorMessages.push(HashtagMessage.LONG);
+        }
+      });
+
+      if (isDuplicate) {
+        errorMessages.push(HashtagMessage.SAME);
+      }
+
+      showValidationError(errorMessages.join('\n'));
+    }
+  };
 
   // Event handlers
   uploadButton.addEventListener('change', onUploadButtonClick);
