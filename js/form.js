@@ -421,7 +421,10 @@
 
   window.form = {
     fileUpload: uploadButton,
-    imagePreview: imagePreview
+    imagePreview: imagePreview,
+    main: main,
+    success: success,
+    error: error
   };
 
 })();
