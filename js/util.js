@@ -10,8 +10,15 @@
     input.value = '';
   };
 
+  var checkActionCode = function (evt, key, action) {
+    if (evt.keyCode === key) {
+      action();
+    }
+  };
+
   window.util = {
     keycode: keycode,
-    resetValue: resetValue
+    resetValue: resetValue,
+    checkActionCode: checkActionCode
   };
 })();
