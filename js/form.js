@@ -91,6 +91,12 @@
   var descriptionInput = uploadOverlay.querySelector('.text__description');
   var imageUploadPreview = document.querySelector('.img-upload__preview');
   var imagePreview = imageUploadPreview.querySelector('img');
+  var main = document.querySelector('main');
+  var successTemplate = document.querySelector('#success');
+  var success = successTemplate.content.querySelector('.success');
+  var errorTemplate = document.querySelector('#error');
+  var error = errorTemplate.content.querySelector('.error');
+  var modalButton;
   var activeEffect;
 
   // Hide on ESC keydown
@@ -121,10 +127,14 @@
     form.reset();
 
     document.removeEventListener('keydown', onUploadEscPress);
+    uploadCancelButton.removeEventListener('click', hideUploadOverlay);
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
     effectsList.removeEventListener('click', setEffect);
+    effectLevel.removeEventListener('click', onEffectLevelClick);
     uploadSubmit.removeEventListener('click', onUploadSubmitClick);
+    form.removeEventListener('submit', onFormSubmit);
+    hashtagsInput.removeEventListener('input', onHashtagsInput);
   };
 
   // Default form settings
@@ -157,7 +167,9 @@
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
     effectsList.addEventListener('click', setEffect);
+    effectLevel.addEventListener('click', onEffectLevelClick);
     uploadSubmit.addEventListener('click', onUploadSubmitClick);
+    form.addEventListener('submit', onFormSubmit);
     hashtagsInput.addEventListener('input', onHashtagsInput);
     hashtagsInput.addEventListener('keydown', onHashtagsInputEnterPress);
   };
@@ -265,6 +277,10 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  var onEffectLevelClick = function (evt) {
+    getFilterValue(evt.clientX);
+  };
+
   // Validation
   var showValidationError = function (message) {
     hashtagsInput.setCustomValidity(message);
@@ -311,6 +327,93 @@
 
       showValidationError(errorMessages.join('\n'));
     }
+  };
+
+
+  // Show modal
+  var showModal = function (modal) {
+    hideUploadOverlay();
+
+    var popup = modal.cloneNode(true);
+    main.appendChild(popup);
+  };
+
+  var showSuccessModal = function () {
+    showModal(success);
+
+    modalButton = document.querySelector('.success__button');
+    modalButton.addEventListener('click', onSuccessButtonClick);
+    document.addEventListener('keydown', onSuccessEscPress);
+    document.addEventListener('click', onSuccessClick);
+  };
+
+  var showErrorModal = function () {
+    showModal(error);
+
+    modalButton = document.querySelector('.error__button');
+    modalButton.addEventListener('click', onErrorButtonClick);
+    document.addEventListener('keydown', onErrorEscPress);
+    document.addEventListener('click', onErrorClick);
+  };
+
+
+  // Hide modal
+  var hideSuccessModal = function () {
+    modalButton = document.querySelector('.success__button');
+    modalButton.removeEventListener('click', onSuccessButtonClick);
+
+    main.removeChild(document.querySelector('.success'));
+    document.removeEventListener('keydown', onSuccessEscPress);
+    document.removeEventListener('click', onSuccessClick);
+  };
+
+  var hideErrorModal = function () {
+    modalButton = document.querySelector('.error__button');
+    modalButton.removeEventListener('click', onErrorButtonClick);
+
+    main.removeChild(document.querySelector('.error'));
+    document.removeEventListener('keydown', onErrorEscPress);
+    document.removeEventListener('click', onErrorClick);
+  };
+
+  var onSuccessButtonClick = function () {
+    hideSuccessModal();
+  };
+
+  var onErrorButtonClick = function () {
+    hideErrorModal();
+  };
+
+  var onSuccessEscPress = function (evt) {
+    window.util.checkActionCode(evt, window.util.keycode.ESC, hideSuccessModal);
+  };
+
+  var onErrorEscPress = function (evt) {
+    window.util.checkActionCode(evt, window.util.keycode.ESC, hideErrorModal);
+  };
+
+  var onSuccessClick = function () {
+    hideSuccessModal();
+  };
+
+  var onErrorClick = function () {
+    hideErrorModal();
+  };
+
+  // Send form
+  var onSuccessUpload = function () {
+    showSuccessModal();
+  };
+
+  var onErrorUpload = function () {
+    showErrorModal();
+  };
+
+  var onFormSubmit = function (evt) {
+    onUploadSubmitClick();
+
+    window.backend.uploadData(new FormData(form), onSuccessUpload, onErrorUpload);
+    evt.preventDefault();
   };
 
   // Event handlers
