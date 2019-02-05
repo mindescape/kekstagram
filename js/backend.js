@@ -38,10 +38,12 @@
     xhr.send(data);
   };
 
+
   // Get data
   var downloadData = function (onLoad, onError) {
     createXHR(URL.DOWNLOAD, 'GET', onLoad, onError);
   };
+
 
   // Receive data
   var uploadData = function (data, onLoad, onError) {

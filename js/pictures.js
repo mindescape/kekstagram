@@ -67,6 +67,7 @@
     picturesDOM.appendChild(fragment);
   };
 
+
   // Remove pictures
   var removePictures = function () {
     var photos = picturesDOM.querySelectorAll('.picture');

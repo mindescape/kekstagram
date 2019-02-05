@@ -101,6 +101,7 @@
   var modalButton;
   var activeEffect;
 
+
   // Hide on ESC keydown
   var onUploadEscPress = function (evt) {
     var focused = document.activeElement;
@@ -121,6 +122,7 @@
     hashtagsInput.style.outline = null;
   };
 
+
   // Hide form
   var hideUploadOverlay = function () {
     uploadOverlay.classList.add('hidden');
@@ -140,6 +142,7 @@
     hashtagsInput.removeEventListener('input', onHashtagsInput);
   };
 
+
   // Default form settings
   var resetScale = function () {
     imagePreview.style.transform = null;
@@ -157,6 +160,7 @@
     effectLevelValue.value = '100';
     effectLevel.classList.add('hidden');
   };
+
 
   // Open form
   var onUploadButtonClick = function () {
@@ -177,6 +181,7 @@
     hashtagsInput.addEventListener('input', onHashtagsInput);
     hashtagsInput.addEventListener('keydown', onHashtagsInputEnterPress);
   };
+
 
   // Change image scale
   var setScale = function (value) {
@@ -201,6 +206,7 @@
       setScale(value);
     }
   };
+
 
   // Set effect to image
   var getEffect = function (evt) {
@@ -234,10 +240,12 @@
     }
   };
 
+
   // Set filter value
   var setFilterValue = function (effect, value) {
     imagePreview.style.filter = effect.filter + '(' + value + effect.unit + ')';
   };
+
 
   // Set effect
   var getFilterValue = function (coordinate) {
@@ -259,6 +267,7 @@
     effectLevelValue.value = value;
     setFilterValue(activeEffect, filterValue);
   };
+
 
   // Move pin
   effectLevelPin.addEventListener('mousedown', function (evt) {
@@ -284,6 +293,7 @@
   var onEffectLevelClick = function (evt) {
     getFilterValue(evt.clientX);
   };
+
 
   // Validation
   var showValidationError = function (message) {
@@ -404,6 +414,7 @@
     hideErrorModal();
   };
 
+
   // Send form
   var onSuccessUpload = function () {
     showSuccessModal();
@@ -419,6 +430,7 @@
     window.backend.uploadData(new FormData(form), onSuccessUpload, onErrorUpload);
     evt.preventDefault();
   };
+
 
   // Event handlers
   uploadButton.addEventListener('change', onUploadButtonClick);

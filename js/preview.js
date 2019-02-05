@@ -17,6 +17,7 @@
   var bigPictureCloseButton = bigPicture.querySelector('#picture-cancel');
   var currentPicture;
 
+
   // Create element
   var createElement = function (tagName, className, text) {
     var element = document.createElement(tagName);
@@ -28,6 +29,7 @@
 
     return element;
   };
+
 
   // Create comment
   var createComment = function (comment) {
@@ -45,6 +47,7 @@
 
     return commentItem;
   };
+
 
   // Add comments
   var addComments = function (picture) {
@@ -85,6 +88,7 @@
     setSocialCommentsCount(addedCommentsCount, picture.comments.length);
     commentsList.appendChild(fragment);
   };
+
 
   // Show big picture
   var fillOverlay = function (picture) {
