@@ -1,7 +1,8 @@
 'use strict';
 
 (function () {
-  var keycode = {
+
+  var Keycode = {
     ESC: 27,
     ENTER: 13
   };
@@ -32,7 +33,7 @@
   };
 
   window.util = {
-    keycode: keycode,
+    Keycode: Keycode,
     resetValue: resetValue,
     checkActionCode: checkActionCode,
     searchDuplicate: searchDuplicate

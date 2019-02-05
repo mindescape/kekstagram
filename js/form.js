@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var Scale = {
     MIN: 25,
     MAX: 100,
@@ -104,12 +105,12 @@
     var focused = document.activeElement;
 
     if (focused !== hashtagsInput && focused !== descriptionInput) {
-      window.util.checkActionCode(evt, window.util.keycode.ESC, hideUploadOverlay);
+      window.util.checkActionCode(evt, window.util.Keycode.ESC, hideUploadOverlay);
     }
   };
 
   var onHashtagsInputEnterPress = function (evt) {
-    if (evt.keyCode === window.util.keycode.ENTER) {
+    if (evt.keycode === window.util.Keycode.ENTER) {
       evt.preventDefault();
     }
   };
@@ -385,11 +386,11 @@
   };
 
   var onSuccessEscPress = function (evt) {
-    window.util.checkActionCode(evt, window.util.keycode.ESC, hideSuccessModal);
+    window.util.checkActionCode(evt, window.util.Keycode.ESC, hideSuccessModal);
   };
 
   var onErrorEscPress = function (evt) {
-    window.util.checkActionCode(evt, window.util.keycode.ESC, hideErrorModal);
+    window.util.checkActionCode(evt, window.util.Keycode.ESC, hideErrorModal);
   };
 
   var onSuccessClick = function () {

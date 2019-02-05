@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var AVATAR_SIZE = '35';
   var COMMENTS_COUNT = 5;
 
@@ -128,7 +129,7 @@
   };
 
   var onBigPictureEscPress = function (evt) {
-    window.util.checkActionCode(evt, window.util.keycode.ESC, hideBigPicture);
+    window.util.checkActionCode(evt, window.util.Keycode.ESC, hideBigPicture);
   };
 
   var onOutsideBigPictureClick = function (evt) {

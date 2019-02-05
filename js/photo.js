@@ -1,13 +1,14 @@
 'use strict';
 
 (function () {
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
+  var TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var readFile = function () {
     var file = window.form.fileUpload.files[0];
     var fileName = file.name.toLowerCase();
 
-    var matches = FILE_TYPES.some(function (type) {
+    var matches = TYPES.some(function (type) {
       return fileName.endsWith(type);
     });
 
