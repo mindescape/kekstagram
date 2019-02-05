@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var Scale = {
     MIN: 25,
     MAX: 100,
@@ -73,6 +74,7 @@
     LONG: 'Максимальная длина одного хэш-тега — 20 символов, включая решётку. '
   };
 
+  var body = document.querySelector('body');
   var form = document.querySelector('.img-upload__form');
   var uploadButton = document.querySelector('#upload-file');
   var uploadCancelButton = document.querySelector('#upload-cancel');
@@ -99,17 +101,18 @@
   var modalButton;
   var activeEffect;
 
+
   // Hide on ESC keydown
   var onUploadEscPress = function (evt) {
     var focused = document.activeElement;
 
     if (focused !== hashtagsInput && focused !== descriptionInput) {
-      window.util.checkActionCode(evt, window.util.keycode.ESC, hideUploadOverlay);
+      window.util.checkActionCode(evt, window.util.Keycode.ESC, hideUploadOverlay);
     }
   };
 
   var onHashtagsInputEnterPress = function (evt) {
-    if (evt.keyCode === window.util.keycode.ENTER) {
+    if (evt.keycode === window.util.Keycode.ENTER) {
       evt.preventDefault();
     }
   };
@@ -119,9 +122,11 @@
     hashtagsInput.style.outline = null;
   };
 
+
   // Hide form
   var hideUploadOverlay = function () {
     uploadOverlay.classList.add('hidden');
+    body.classList.remove('modal-open');
     window.util.resetValue(uploadButton);
     hashtagsInput.style.outline = null;
     form.reset();
@@ -136,6 +141,7 @@
     form.removeEventListener('submit', onFormSubmit);
     hashtagsInput.removeEventListener('input', onHashtagsInput);
   };
+
 
   // Default form settings
   var resetScale = function () {
@@ -155,9 +161,11 @@
     effectLevel.classList.add('hidden');
   };
 
+
   // Open form
   var onUploadButtonClick = function () {
     uploadOverlay.classList.remove('hidden');
+    body.classList.add('modal-open');
     window.photo.readFile();
     resetScale();
     resetEffect();
@@ -173,6 +181,7 @@
     hashtagsInput.addEventListener('input', onHashtagsInput);
     hashtagsInput.addEventListener('keydown', onHashtagsInputEnterPress);
   };
+
 
   // Change image scale
   var setScale = function (value) {
@@ -197,6 +206,7 @@
       setScale(value);
     }
   };
+
 
   // Set effect to image
   var getEffect = function (evt) {
@@ -230,10 +240,12 @@
     }
   };
 
+
   // Set filter value
   var setFilterValue = function (effect, value) {
     imagePreview.style.filter = effect.filter + '(' + value + effect.unit + ')';
   };
+
 
   // Set effect
   var getFilterValue = function (coordinate) {
@@ -255,6 +267,7 @@
     effectLevelValue.value = value;
     setFilterValue(activeEffect, filterValue);
   };
+
 
   // Move pin
   effectLevelPin.addEventListener('mousedown', function (evt) {
@@ -280,6 +293,7 @@
   var onEffectLevelClick = function (evt) {
     getFilterValue(evt.clientX);
   };
+
 
   // Validation
   var showValidationError = function (message) {
@@ -385,11 +399,11 @@
   };
 
   var onSuccessEscPress = function (evt) {
-    window.util.checkActionCode(evt, window.util.keycode.ESC, hideSuccessModal);
+    window.util.checkActionCode(evt, window.util.Keycode.ESC, hideSuccessModal);
   };
 
   var onErrorEscPress = function (evt) {
-    window.util.checkActionCode(evt, window.util.keycode.ESC, hideErrorModal);
+    window.util.checkActionCode(evt, window.util.Keycode.ESC, hideErrorModal);
   };
 
   var onSuccessClick = function () {
@@ -399,6 +413,7 @@
   var onErrorClick = function () {
     hideErrorModal();
   };
+
 
   // Send form
   var onSuccessUpload = function () {
@@ -415,6 +430,7 @@
     window.backend.uploadData(new FormData(form), onSuccessUpload, onErrorUpload);
     evt.preventDefault();
   };
+
 
   // Event handlers
   uploadButton.addEventListener('change', onUploadButtonClick);

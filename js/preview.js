@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var AVATAR_SIZE = '35';
   var COMMENTS_COUNT = 5;
 
@@ -16,6 +17,7 @@
   var bigPictureCloseButton = bigPicture.querySelector('#picture-cancel');
   var currentPicture;
 
+
   // Create element
   var createElement = function (tagName, className, text) {
     var element = document.createElement(tagName);
@@ -27,6 +29,7 @@
 
     return element;
   };
+
 
   // Create comment
   var createComment = function (comment) {
@@ -44,6 +47,7 @@
 
     return commentItem;
   };
+
 
   // Add comments
   var addComments = function (picture) {
@@ -84,6 +88,7 @@
     setSocialCommentsCount(addedCommentsCount, picture.comments.length);
     commentsList.appendChild(fragment);
   };
+
 
   // Show big picture
   var fillOverlay = function (picture) {
@@ -128,7 +133,7 @@
   };
 
   var onBigPictureEscPress = function (evt) {
-    window.util.checkActionCode(evt, window.util.keycode.ESC, hideBigPicture);
+    window.util.checkActionCode(evt, window.util.Keycode.ESC, hideBigPicture);
   };
 
   var onOutsideBigPictureClick = function (evt) {
