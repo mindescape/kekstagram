@@ -74,6 +74,7 @@
     LONG: 'Максимальная длина одного хэш-тега — 20 символов, включая решётку. '
   };
 
+  var body = document.querySelector('body');
   var form = document.querySelector('.img-upload__form');
   var uploadButton = document.querySelector('#upload-file');
   var uploadCancelButton = document.querySelector('#upload-cancel');
@@ -123,6 +124,7 @@
   // Hide form
   var hideUploadOverlay = function () {
     uploadOverlay.classList.add('hidden');
+    body.classList.remove('modal-open');
     window.util.resetValue(uploadButton);
     hashtagsInput.style.outline = null;
     form.reset();
@@ -159,6 +161,7 @@
   // Open form
   var onUploadButtonClick = function () {
     uploadOverlay.classList.remove('hidden');
+    body.classList.add('modal-open');
     window.photo.readFile();
     resetScale();
     resetEffect();
