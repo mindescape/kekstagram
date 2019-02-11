@@ -11,6 +11,7 @@
     "url": ""
   },
   "devDependencies": {
+    "del": "^3.0.0",
     "eslint": "4.19.1",
     "eslint-config-htmlacademy": "0.5.2",
     "gulp": "^4.0.0"
